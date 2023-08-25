@@ -2,8 +2,8 @@
 
 <!-- badges: start -->
 [![Project Status: Concept – Minimal or no implementation has been done yet, or the repository is only intended to be a limited example, demo, or proof-of-concept.](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
-[![R build status](https://github.com/mrc-ide/tinyjson/workflows/R-CMD-check/badge.svg)](https://github.com/mrc-ide/tinyjson/actions)
-[![codecov.io](https://codecov.io/github/mrc-ide/tinyjson/coverage.svg?branch=main)](https://codecov.io/github/mrc-ide/tinyjson?branch=main)
+[![R build status](https://github.com/reside-ic/tinyjson/workflows/R-CMD-check/badge.svg)](https://github.com/reside-ic/tinyjson/actions)
+[![codecov.io](https://codecov.io/github/reside-ic/tinyjson/coverage.svg?branch=main)](https://codecov.io/github/reside-ic/tinyjson?branch=main)
 <!-- badges: end -->
 
 This package solves a very specific goal - read json into R with almost no deserialisation, into some intermediate format that does not suffer from the information loss typically encountered with arrays (are they scalar or are they a vector of length 1?).
@@ -17,7 +17,7 @@ The package is not intended to be fast (it is written in pure R) nor provide goo
 To install `tinyjson`:
 
 ```r
-remotes::install_github("mrc-ide/tinyjson", upgrade = FALSE)
+remotes::install_github("reside-ic/tinyjson", upgrade = FALSE)
 ```
 
 ## License
