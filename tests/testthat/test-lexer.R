@@ -59,5 +59,5 @@ test_that("simple cases", {
 ## We never actually expect to fail; these would need improvement.
 test_that("handle error cases with some grace", {
   expect_error(lex_json('"unterminated'), "Expected end of string")
-  expect_error(lex_json('falser'), "Unexpected token at pos 6")
+  expect_error(lex_json("falser"), "Unexpected token at pos 6")
 })

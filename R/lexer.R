@@ -7,10 +7,10 @@ lex_json <- function(string) {
   tokens
 }
 
-JSON_NUMBER_START <- c(as.character(0:9), ".", "-")
-JSON_NUMBER <- c(JSON_NUMBER_START, "e")
-JSON_WHITESPACE = c(" ", "\t", "\b", "\n", "\r")
-JSON_SYNTAX = c(",", ":", "[", "]", "{", "}")
+json_number_start <- c(as.character(0:9), ".", "-")
+json_number <- c(json_number_start, "e")
+json_whitespace <- c(" ", "\t", "\b", "\n", "\r")
+json_syntax <- c(",", ":", "[", "]", "{", "}")
 
 json_element <- function(type, value) {
   list(type = type, value = value)
@@ -60,15 +60,15 @@ json_reader <- function(string) {
       return(NULL)
     }
     cur <- chars[[pos]]
-    if (any(cur == JSON_SYNTAX)) {
+    if (any(cur == json_syntax)) {
       pos <<- pos + 1L
       json_element("syntax", cur)
     } else if (cur == '"') {
       chomp_string()
-    } else if (any(cur == JSON_WHITESPACE)) {
-      chomp_chars("whitespace", JSON_WHITESPACE)
-    } else if (cur %in% JSON_NUMBER_START) {
-      chomp_chars("number", JSON_NUMBER)
+    } else if (any(cur == json_whitespace)) {
+      chomp_chars("whitespace", json_whitespace)
+    } else if (cur %in% json_number_start) {
+      chomp_chars("number", json_number)
     } else {
       chomp_literal_or_fail()
     }

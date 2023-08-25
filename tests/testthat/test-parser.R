@@ -65,16 +65,16 @@ test_that("objects throw parse errors when invalid", {
                "Expected a comma after object element")
   expect_error(from_json('{"a": 1, "b": 2'),
                "Ran out of tokens while parsing object")
-  expect_error(from_json('{'),
+  expect_error(from_json("{"),
                "Ran out of tokens while parsing object")
 })
 
 
 test_that("arrays throw parse errors when invalid", {
-  expect_error(from_json('[1, 2 3]'),
+  expect_error(from_json("[1, 2 3]"),
                "Expected a comma after array element")
-  expect_error(from_json('[1, 2, 3'),
+  expect_error(from_json("[1, 2, 3"),
                "Ran out of tokens while parsing array")
-  expect_error(from_json('['),
+  expect_error(from_json("["),
                "Ran out of tokens while parsing array")
 })
