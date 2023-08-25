@@ -6,7 +6,7 @@ from_json <- function(string) {
 json_parse_tokens <- function(tokens) {
   tokens <- json_tokens(tokens)
   if (tokens$is_complete()) {
-    return(list())
+    stop("Trying to parse empty json")
   }
   res <- json_parse_any(tokens)
   if (!tokens$is_complete()) {

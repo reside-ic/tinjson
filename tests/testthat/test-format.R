@@ -4,7 +4,6 @@ expect_can_roundtrip <- function(x) {
 }
 
 test_that("can roundtrip simple json", {
-  expect_can_roundtrip("")
   expect_can_roundtrip("[]")
   expect_can_roundtrip("{}")
   expect_can_roundtrip("true")

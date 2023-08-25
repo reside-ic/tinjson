@@ -1,6 +1,4 @@
 test_that("can convert simple things from json", {
-  expect_equal(from_json(""),
-               structure(list(), class = "tinyjson"))
   expect_equal(from_json("1"),
                structure(list(type = "number", value = "1"),
                          class = "tinyjson"))
@@ -42,6 +40,12 @@ test_that("can convert simple things from json", {
         list(key = "a", value = list(type = "number", value = "1")),
         list(key = "b", value = list(type = "number", value = "2")))),
       class = "tinyjson"))
+})
+
+
+test_that("error if empty", {
+  expect_error(from_json(""),
+               "Trying to parse empty json")
 })
 
 
