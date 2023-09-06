@@ -1,3 +1,25 @@
+##' Parse a json string into a lossless R representation. Unlike
+##' `jsonlite::fromJSON` this does not try and deserialise the JSON
+##' into conventional R objects, but instead converts the data into a
+##' representation that can be inspected, modified and rewritten with
+##' [tinyjson::to_json] without any corruption caused by the ambiguity
+##' of R's lack of a true scalar type.
+##'
+##' @title Parse json into lossless R representation
+##'
+##' @param string A string to parse as json
+##'
+##' @return An object of class `tinyjson`, which is our lossless
+##'   representation of json data.
+##'
+##' @export
+##'
+##' @seealso [tinyjson::from_json], which does the inverse
+##'   transformation
+##'
+##' @examples
+##' tinyjson::from_json('[1, 2, 3, 4]')
+##' tinyjson::from_json('{"a": "value"}')
 from_json <- function(string) {
   structure(json_parse_tokens(lex_json(string)), class = "tinyjson")
 }
