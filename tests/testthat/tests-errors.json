@@ -1,0 +1,21 @@
+{
+    "19": "Out of bounds array access at '/bar/8' - must be in [0, 2]",
+    "20": "Expected a numeric index as '/bar' is an array, but was given '-1'",
+    "29": "Out of bounds array access at '/3' - must be in [0, 2]",
+    "31": "Expected a numeric index as '/' is an array, but was given '1e0'",
+    "32": "Expected a numeric index as '/' is an array, but was given 'bar'",
+    "45": "Did not find key 'foo' in object '/'",
+    "56": "Patch test failed: expected '[1,2]' but found '{\"bar\":[1,2,5,4]}'",
+    "67": "Expected a numeric index as '/baz' is an array, but was given '1e0'",
+    "70": "Expected a numeric index as '/' is an array, but was given '1e0'",
+    "71": "Expected a numeric index as '/' is an array, but was given '1e0'",
+    "72": "Expected a numeric index as '/baz' is an array, but was given '1e0'",
+    "73": "Expected a numeric index as '/baz' is an array, but was given '1e0'",
+    "74": "Expected a numeric index as '/' is an array, but was given '1e0'",
+    "77": "Pointer must start with '/', but was given 'foo'",
+    "88": "Expected a numeric index as '/' is an array, but was given '00'",
+    "89": "Expected a numeric index as '/' is an array, but was given '01'",
+    "90": "Trying to remove non-existant entry '/baz'",
+    "91": "Did not find key 'missing1' in object '/'",
+    "92": "Trying to remove non-existant entry '/2'"
+}
