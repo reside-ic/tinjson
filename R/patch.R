@@ -1,18 +1,125 @@
+##' Patch json documents. This set of functions presents an R-ish
+##' interface to all the json patch verbs (add, remove, copy, replace,
+##' move, and test). It does not implement the json-format patch
+##' (i.e., a patch represented itself as a json document). The primary
+##' use case here is to allow expressing modifications to a json
+##' document from R without having to deserialise the document into
+##' R's data structures, so that a "json -> R -> json" roundtrip can
+##' be done losslessly, with modification in R.
+##'
+##' This interface is designed to play nicely with R's piping
+##' operator, see examples.
+##'
+##' The verbs are:
+##'
+##' ## Add (`json_patch_add`)
+##'
+##' Adds a value to an object or inserts it into an array. In the case
+##' of an array, the value is inserted before the given index. The `-`
+##' character can be used instead of an index to insert at the end of
+##' an array.  Note that the first element has index `0` (not `1`).
+##'
+##' ## Remove (`json_patch_remove`)
+##'
+##' Removes a value from an object or array.
+##'
+##' ## Replace (`json_patch_replace`)
+##'
+##' Replaces a value. Equivalent to a `remove` followed by an `add`.
+##'
+##' ## Copy (`json_patch_copy`)
+##'
+##' Copies a value from one location to another within the JSON
+##' document.
+##'
+##' ## Move (`json_patch_move`)
+##'
+##' Moves a value from one location to the other.
+##'
+##' ## Test (`json_patch_test`)
+##'
+##' Tests that the specified value is set in the document. If the test
+##' fails, then an error is thrown, so can be used within a pipeline
+##' to prevent a patch applying.
+##'
+##' @title JSON Patch
+##'
+##' @param json The json document to work with
+##'
+##' @param path The patch to modify (or for `json_patch_test`, to test)
+##'
+##' @param value The value to add (`json_patch_add`), replace an
+##'   existing value with (`json_patch_replace`) or test
+##'   (`json_patch_test`)
+##'
+##' @param from The source value for `json_patch_move` and
+##'   `json_patch_copy`
+##'
+##' @rdname json_patch
+##'
+##' @seealso The json patch specification for more details, at
+##'   https://jsonpatch.com/
+##'
+##' @return The modified json document (in parsed form) or throws if
+##'   impossible
+##'
+##' @export
+##' @examples
+##'
+##' # The example doc used in https://jsonpatch.com/
+##' doc <- tinyjson::from_json('{
+##'   "biscuits": [
+##'     { "name": "Digestive" },
+##'     { "name": "Choco Leibniz" }
+##'    ]
+##' }')
+##'
+##' # add
+##' tinyjson::json_patch_add(doc, "/biscuits/1", '{"name": "Ginger Nut"}') |>
+##'   tinyjson::to_json()
+##'
+##' # remove
+##' tinyjson::json_patch_remove(doc, "/biscuits") |> tinyjson::to_json()
+##' tinyjson::json_patch_remove(doc, "/biscuits/0") |> tinyjson::to_json()
+##'
+##' # replace (note the extra quotes here, the 'value' gets parsed as
+##' # json and is not an R string)
+##' tinyjson::json_patch_replace(
+##'   doc, "/biscuits/0/name", '"Chocolate Digestive"') |> tinyjson::to_json()
+##'
+##' # copy
+##' tinyjson::json_patch_copy(doc, "/biscuits/0", "/best_biscuit") |>
+##'   tinyjson::to_json()
+##'
+##' # move
+##' tinyjson::json_patch_copy(doc, "/biscuits", "/cookies") |>
+##'   tinyjson::to_json()
+##'
+##' # test
+##' tinyjson::json_patch_test(doc, "/biscuits/1/name", '"Choco Leibniz"') |>
+##'   tinyjson::to_json()
+##'
 json_patch_remove <- function(json, path) {
   patch_remove(json, json_pointer(json, path))
 }
 
 
+##' @export
+##' @rdname json_patch
 json_patch_replace <- function(json, path, value) {
   patch_replace(json, json_pointer(json, path), unclass(from_json(value)))
 }
 
 
+##' @export
+##' @rdname json_patch
 json_patch_add <- function(json, path, value) {
   patch_add(json, json_pointer(json, path), unclass(from_json(value)))
 }
 
 
+##' @export
+##' @rdname json_patch
 json_patch_copy <- function(json, from, path) {
   ptr_from <- json_pointer(json, from)
   ptr_path <- json_pointer(json, path)
@@ -20,6 +127,8 @@ json_patch_copy <- function(json, from, path) {
 }
 
 
+##' @export
+##' @rdname json_patch
 json_patch_move <- function(json, from, path) {
   ptr_from <- json_pointer(json, from)
   if (from == path) {
@@ -30,6 +139,8 @@ json_patch_move <- function(json, from, path) {
 }
 
 
+##' @export
+##' @rdname json_patch
 json_patch_test <- function(json, path, value) {
   patch_test(json, json_pointer(json, path), from_json(value))
 }
