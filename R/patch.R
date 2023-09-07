@@ -1,27 +1,60 @@
 json_patch_remove <- function(json, path) {
-  ptr <- json_pointer(json, path)
+  patch_remove(json, json_pointer(json, path))
+}
+
+
+json_patch_replace <- function(json, path, value) {
+  patch_replace(json, json_pointer(json, path), unclass(from_json(value)))
+}
+
+
+json_patch_add <- function(json, path, value) {
+  patch_add(json, json_pointer(json, path), unclass(from_json(value)))
+}
+
+
+json_patch_copy <- function(json, from, path) {
+  ptr_from <- json_pointer(json, from)
+  ptr_path <- json_pointer(json, path)
+  patch_copy(json, ptr_from, ptr_path)
+}
+
+
+json_patch_move <- function(json, from, path) {
+  ptr_from <- json_pointer(json, from)
+  if (from == path) {
+    return(json)
+  }
+  ptr_path <- json_pointer(json, path)
+  patch_move(json, ptr_from, ptr_path)
+}
+
+
+json_patch_test <- function(json, path, value) {
+  patch_test(json, json_pointer(json, path), from_json(value))
+}
+
+
+patch_remove <- function(json, ptr) {
   if (last(ptr$element) > length(json[[ptr$container]])) {
-    stop(sprintf("Trying to remove non-existant entry '%s'", path))
+    stop(sprintf("Trying to remove non-existant entry '%s'", ptr$path))
   }
   json[[ptr$element]] <- NULL
   json
 }
 
-json_patch_replace <- function(json, path, value) {
-  ptr <- json_pointer(json, path)
+
+patch_replace <- function(json, ptr, value) {
   if (length(ptr$value) == 0) {
-    json <- unclass(from_json(value))
+    json <- value
   } else {
-    json[[ptr$value]] <- unclass(from_json(value))
+    json[[ptr$value]] <- value
   }
   json
 }
 
 
-json_patch_add <- function(json, path, value) {
-  ptr <- json_pointer(json, path)
-  value <- unclass(from_json(value))
-
+patch_add <- function(json, ptr, value) {
   if (length(ptr$value) == 0) {
     json <- value
   } else if (ptr$type == "array") {
@@ -47,19 +80,13 @@ json_patch_add <- function(json, path, value) {
   json
 }
 
-json_patch_copy <- function(json, from, path) {
-  ptr <- json_pointer(json, from)
-  ## TODO: we need to avoid this to_json eventually!
-  json_patch_add(json, path, to_json(json[[ptr$value]]))
+
+patch_copy <- function(json, ptr_from, ptr_path) {
+  patch_add(json, ptr_path, json[[ptr_from$value]])
 }
 
 
-json_patch_move <- function(json, from, path) {
-  ptr_from <- json_pointer(json, from)
-  if (from == path) {
-    return(json)
-  }
-  ptr_path <- json_pointer(json, path)
+patch_move <- function(json, ptr_from, ptr_path) {
   is_same_array <- ptr_from$type == "array" && ptr_path$type == "array" &&
     identical(ptr_from$container, ptr_path$container)
   if (is_same_array) {
@@ -67,22 +94,19 @@ json_patch_move <- function(json, from, path) {
     ## https://jsonpatch.me/ but the actual spec tests don't include
     ## an example.
     value <- json[[ptr_from$element]]
-    json <- json_patch_remove(json, from)
-    json_patch_add(json, path, to_json(value)) # TODO: avoid to_json
+    json <- patch_remove(json, ptr_from)
+    patch_add(json, ptr_path, value)
   } else {
-    ## TODO: write these to accept the resolved pointer for from and path?
-    json <- json_patch_copy(json, from, path)
-    json_patch_remove(json, from)
+    json <- patch_copy(json, ptr_from, ptr_path)
+    patch_remove(json, ptr_from)
   }
 }
 
-
-json_patch_test <- function(json, path, value) {
-  ptr <- json_pointer(json, path)
+patch_test <- function(json, ptr, value) {
   found <- if (length(ptr$value) == 0) json else json[[ptr$value]]
-  if (!is_same(found, from_json(value))) {
+  if (!is_same(found, value)) {
     stop(sprintf("Patch test failed: expected '%s' but found '%s'",
-                 value, to_json(found)))
+                 to_json(value), to_json(found)))
   }
   json
 }
