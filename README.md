@@ -8,7 +8,7 @@
 
 This package solves a very specific goal - read json into R with almost no deserialisation, into some intermediate format that does not suffer from the information loss typically encountered with arrays (are they scalar or are they a vector of length 1?).
 
-Unlike `jsonlite::serialzeJSON` which aims for a lossless `R -> JSON -> R` roundtrip, we aim for a lossless `JSON -> R -> JSON` roundtrip, so that R can safely ammend existing JSON that might be consumed by other applications without breaking it.
+Unlike `jsonlite::serialzeJSON` which aims for a lossless `R -> JSON -> R` roundtrip, we aim for a lossless `JSON -> R -> JSON` roundtrip, so that R can safely amend existing JSON that might be consumed by other applications without breaking it.
 
 The package is not intended to be fast (it is written in pure R) nor provide good errors (use jsonlite first to ensure the json is valid) nor provide good output formatting (use jsonlite's pretty formatter).
 

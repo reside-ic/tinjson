@@ -77,6 +77,6 @@ new_pointer <- function(parts, type, value) {
   }
   ret <- list(path = path, parts = parts, type = type,
               value = value, element = element, container = container)
-  class(ret) <- "jsonpointer"
+  class(ret) <- "json_pointer"
   ret
 }
