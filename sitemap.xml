@@ -19,6 +19,9 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/json_patch.html</loc>
+  </url>
+  <url>
     <loc>/reference/to_json.html</loc>
   </url>
 </urlset>
